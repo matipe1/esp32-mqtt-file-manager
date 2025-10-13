@@ -1,11 +1,17 @@
 import express from "express";
 import fs from "fs";
+import path from "path";
+import {fileURLToPath} from "url";
 import cors from "cors";
 
 const PORT = process.env.PORT || 3000;
 
 const app = express();
 app.use(cors());
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const csvPath = path.join(__dirname, "../data/data.csv");
 
 app.get("/mediciones/th", (req, res) => {
     try {
@@ -16,8 +22,8 @@ app.get("/mediciones/th", (req, res) => {
     if (!csv.trim()) return res.json([]);
 
     const rows = csv.trim().split("\n").map(line => {
-        const [device, temp, hum, ts] = line.split(",");
-        return { device, temperature: +temp, humidity: +hum, ts };
+        const [device, temp, hum, ts, timestamp] = line.split(",");
+        return { device, temperature: +temp, humidity: +hum, ts, timestamp};
     });
     res.json(rows);
     } catch (err) {
