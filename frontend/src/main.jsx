@@ -6,4 +6,5 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />
   </StrictMode>,
-)
+) // Renderiza el componente principal de la aplicación React en el elemento con id 'root'
+
