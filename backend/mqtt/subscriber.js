@@ -22,7 +22,9 @@ client.on("message", (topic, message) => {
     try {
         console.log(`📩 Mensaje recibido en tópico: ${topic}`);
         const data = JSON.parse(message.toString());
-        const line = `${data.device},${data.temperature},${data.humidity},${data.ts}\n`;
+        // Agregar timestamp legible -> a chequear
+        const timestamp = new Date().toISOString();
+        const line = `${data.device},${data.temperature},${data.humidity},${data.ts},${timestamp}\n`;
         fs.appendFileSync(csvPath, line);
         console.log(`Datos guardados: ${line.trim()}`);
     } catch (err) {
