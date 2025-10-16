@@ -10,7 +10,7 @@
 
 const char* ssid = "Wokwi-GUEST";       // Red WiFi en Wokwi
 const char* password = "";              // Sin contraseña en Wokwi
-const char* mqtt_server = "192.168.100.124"; // IP de tu PC donde corre Mosquitto
+const char* mqtt_server = "192.168.100.17"; // IP de tu PC donde corre Mosquitto
 
 #define MQTT_TOPIC "th/mediciones"
 
