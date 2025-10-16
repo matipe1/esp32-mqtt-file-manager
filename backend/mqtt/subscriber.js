@@ -2,9 +2,10 @@ import mqtt from "mqtt";
 import fs from "fs";
 import path from "path";
 import {fileURLToPath} from "url";
-// import dotenv from "dotenv";
+import dotenv from "dotenv";
 
-// dotenv.config();
+// Cargar variables de entorno
+dotenv.config();
 
 const brokerUrl = process.env.BROKER_URL || "mqtt://localhost:1883";
 const client = mqtt.connect(brokerUrl);

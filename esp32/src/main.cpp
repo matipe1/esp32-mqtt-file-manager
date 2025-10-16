@@ -2,6 +2,7 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
+#include <ESPmDNS.h>
 #include "SensorDHT.h"
 
 // ===== CONFIGURACIONES =====
@@ -10,7 +11,11 @@
 
 const char* ssid = "Wokwi-GUEST";       // Red WiFi en Wokwi
 const char* password = "";              // Sin contraseña en Wokwi
-const char* mqtt_server = "192.168.100.17"; // IP de tu PC donde corre Mosquitto
+
+// Configuración MQTT con mDNS
+const char* mqtt_hostname = "mqtt-broker.local"; // Nombre mDNS del broker
+const int mqtt_port = 1883;
+IPAddress mqtt_server_ip;              // IP resuelta dinámicamente
 
 #define MQTT_TOPIC "th/mediciones"
 
@@ -28,6 +33,34 @@ void conectarWiFi() {
     Serial.print(".");
   }
   Serial.println(" ¡Conectado!");
+  
+  // Inicializar mDNS
+  if (!MDNS.begin("esp32-sensor")) {
+    Serial.println("Error al inicializar mDNS");
+  } else {
+    Serial.println("mDNS iniciado");
+  }
+}
+
+bool resolverMQTTServer() {
+  Serial.print("Resolviendo ");
+  Serial.print(mqtt_hostname);
+  Serial.print("...");
+  
+  mqtt_server_ip = MDNS.queryHost(mqtt_hostname);
+  
+  if (mqtt_server_ip == IPAddress(0, 0, 0, 0)) {
+    Serial.println(" Falló");
+    // Fallback: intentar con IP fija como respaldo
+    mqtt_server_ip.fromString("192.168.100.17");
+    Serial.print("Usando IP fallback: ");
+    Serial.println(mqtt_server_ip);
+    return false;
+  } else {
+    Serial.print(" Resuelto: ");
+    Serial.println(mqtt_server_ip);
+    return true;
+  }
 }
 
 void conectarMQTT() {
@@ -50,7 +83,11 @@ void setup() {
   sensor.begin();
 
   conectarWiFi();
-  client.setServer(mqtt_server, 1883); // dominio (IP) + puerto
+  
+  // Resolver la dirección del servidor MQTT
+  resolverMQTTServer();
+  client.setServer(mqtt_server_ip, mqtt_port);
+  
   Serial.println("-- Sistema iniciado --");
 }
 
