@@ -20,7 +20,7 @@ client.on("connect", () => {
 
 client.on("message", (topic, message) => {
     try {
-        console.log(`📩 Mensaje recibido en tópico: ${topic}`);
+        console.log(`Mensaje recibido en tópico: ${topic}`);
         const data = JSON.parse(message.toString());
         // Agregar timestamp legible -> a chequear
         const timestamp = new Date().toISOString();
