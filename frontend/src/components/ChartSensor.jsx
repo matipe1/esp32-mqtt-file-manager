@@ -1,4 +1,3 @@
-import React from "react";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -10,6 +9,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { chartOptions } from "./chartConfig";
 
 ChartJS.register(
   CategoryScale,
@@ -42,48 +42,7 @@ const ChartSensor = ({ labels, temperatureData, humidityData }) => {
     ],
   };
 
-  const options = {
-    responsive: true,
-    interaction: {
-      mode: 'index',
-      intersect: false,
-    },
-    stacked: false,
-    plugins: {
-      legend: {
-        position: 'top',
-      },
-      title: {
-        display: true,
-        text: 'Lecturas de Temperatura y Humedad',
-      },
-    },
-    scales: {
-      y: {
-        type: 'linear',
-        display: true,
-        position: 'left',
-        title: {
-          display: true,
-          text: 'Temperatura (°C)',
-        },
-      },
-      y1: {
-        type: 'linear',
-        display: true,
-        position: 'right',
-        grid: {
-          drawOnChartArea: false,
-        },
-        title: {
-          display: true,
-          text: 'Humedad (%)',
-        },
-      },
-    },
-  };
-
-  return <Line data={data} options={options} />;
+  return <Line data={data} options={chartOptions} />;
 };
 
 export default ChartSensor;
